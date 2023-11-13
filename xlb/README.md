@@ -4,6 +4,13 @@ based on (XDP Tutorial - Basic04)
 
 ## Usage
 
+Setup dependencies (taking ubuntu23.10 (kernel v6.5) as an example)
+
+```
+sudo apt update
+sudo apt install clang llvm libelf-dev libpcap-dev build-essential linux-headers-$(uname -r) linux-tools-common linux-tools-generic libc6-dev-i386
+```
+
 Compile the project
 
 ```
@@ -21,6 +28,8 @@ use this program to pin BPF_MAP to sysfs and initialize map data used in kernel 
 ```
 sudo ./xlb_map -d **YOUR_DEV_NAME**
 ```
+
+before test the load balancer, you need to setup dr mode network, see this file: [drconfig.md](./drconfig.md)
 
 then, you can try the xlb, for example
 
