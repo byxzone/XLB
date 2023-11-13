@@ -4,7 +4,7 @@ based on (XDP Tutorial - Basic04)
 
 ## Usage
 
-Setup dependencies (taking ubuntu23.10 (kernel v6.5) as an example)
+Setup dependencies (taking ubuntu23.10/kernel v6.5 as an example)
 
 ```
 sudo apt update
@@ -14,19 +14,20 @@ sudo apt install clang llvm libelf-dev libpcap-dev build-essential linux-headers
 Compile the project
 
 ```
+./configure
 make
 ```
 
 after you run this command, the xdp program is attached to your NIC DEVICE receive queue
 
 ```
-sudo ./xdp_loader -d **YOUR_DEV_NAME**
+sudo ./xlb/xdp_loader -d **YOUR_DEV_NAME**
 ```
 
 use this program to pin BPF_MAP to sysfs and initialize map data used in kernel practical
 
 ```
-sudo ./xlb_map -d **YOUR_DEV_NAME**
+sudo ./xlb/xlb_map -d **YOUR_DEV_NAME**
 ```
 
 before test the load balancer, you need to setup dr mode network, see this file: [drconfig.md](./drconfig.md)
@@ -49,7 +50,7 @@ sudo cat /sys/fs/bpf/**YOUR_DEV_NAME**/rs_info_map
 and you also see the rate of XDP_PASS/XDP_TX/...
 
 ```
-sudo ./xdp_stats -d **YOUR_DEV_NAME**
+sudo ./xlb/xdp_stats -d **YOUR_DEV_NAME**
 ```
 
 result:
