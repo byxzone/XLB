@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup dependencies
-      run: sudo apt update && sudo apt install clang llvm libelf-dev libpcap-dev build-essential linux-headers-$(uname -r) linux-tools-common linux-tools-generic
+      run: sudo apt update && sudo apt install clang llvm libelf-dev libpcap-dev build-essential linux-headers-$(uname -r) linux-tools-common linux-tools-generic libc6-dev-i386
     - name: configure
       run: ./configure
     - name: make
