@@ -19,3 +19,6 @@ jobs:
       run: ./configure
     - name: make
       run: make
+    - name: Test XLB
+      run: sudo ./xlb/xdp_loader -d lo && sudo ./xlb/xlb_map -d lo && sudo ./xlb/xdp_stats -d lo
+      
