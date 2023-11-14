@@ -20,5 +20,5 @@ jobs:
     - name: make
       run: make
     - name: Test XLB
-      run: cd xlb && sudo ./xdp_loader -d lo && sudo ./xlb_map -d lo && sudo ./xdp_stats -d lo
+      run: ip a && cd xlb && sudo ./xdp_loader -d lo -S && sudo ./xlb_map -d lo && sudo ./xdp_stats -d lo
       
