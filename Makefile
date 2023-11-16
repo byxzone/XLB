@@ -12,7 +12,7 @@ MAKEFLAGS += --no-print-directory
 Q = @
 endif
 
-PROJ = xlb
+PROJ = xlb_core xlb_dynamic
 
 PROJ_CLEAN = $(addsuffix _clean,$(PROJ))
 

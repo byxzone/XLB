@@ -35,10 +35,12 @@ COMMON_H := ${COMMON_OBJS:.o=.h}
 
 EXTRA_DEPS +=
 
+XLB_OBJS +=
+
 # BPF-prog kern and userspace shares struct via header file:
 KERN_USER_H ?= $(wildcard common_kern_user.h)
 
-CFLAGS += -I$(LIB_DIR)/install/include $(EXTRA_CFLAGS) -g
+CFLAGS += -I$(LIB_DIR)/install/include $(EXTRA_CFLAGS) -g 
 BPF_CFLAGS += -I$(LIB_DIR)/install/include $(EXTRA_CFLAGS) -g
 LDFLAGS += -L$(LIB_DIR)/install/lib
 
@@ -49,7 +51,7 @@ all: llvm-check $(USER_TARGETS) $(XDP_OBJ) $(COPY_LOADER) $(COPY_STATS)
 .PHONY: clean $(CLANG) $(LLC)
 
 clean:
-	$(Q)rm -f $(USER_TARGETS) $(XDP_OBJ) $(USER_OBJ) $(COPY_LOADER) $(COPY_STATS) *.ll
+	$(Q)rm -f $(USER_TARGETS) $(XDP_OBJ) $(USER_OBJ) $(COPY_LOADER) $(COPY_STATS) *.ll $(XLB_OBJS)
 
 ifdef COPY_LOADER
 $(LOADER_DIR)/$(COPY_LOADER):
@@ -108,8 +110,8 @@ $(COMMON_H): %.h: %.c
 $(COMMON_OBJS):	%.o: %.h
 	$(Q)$(MAKE) -C $(COMMON_DIR)
 
-$(USER_TARGETS): %: %.c  $(OBJECT_LIBBPF) $(OBJECT_LIBXDP) Makefile $(COMMON_MK) $(COMMON_OBJS) $(KERN_USER_H) $(EXTRA_DEPS)
-	$(QUIET_CC)$(CC) -Wall $(CFLAGS) $(LDFLAGS) -o $@ $(COMMON_OBJS) $(LIB_OBJS) \
+$(USER_TARGETS): %: %.c  $(OBJECT_LIBBPF) $(OBJECT_LIBXDP) Makefile $(COMMON_MK) $(COMMON_OBJS) $(KERN_USER_H) $(EXTRA_DEPS) $(XLB_OBJS)
+	$(QUIET_CC)$(CC) -Wall $(CFLAGS) $(LDFLAGS) -o $@ $(COMMON_OBJS) $(XLB_OBJS) $(LIB_OBJS) \
 	 $< $(LDLIBS)
 
 $(XDP_OBJ): %.o: %.c  Makefile $(COMMON_MK) $(KERN_USER_H) $(EXTRA_DEPS) $(OBJECT_LIBBPF)

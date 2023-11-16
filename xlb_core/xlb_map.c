@@ -1,6 +1,5 @@
 /* SPDX-License-Identifier: GPL-2.0 */
-static const char *__doc__ = "XDP stats program\n"
-	" - Finding xdp_stats_map via --dev name info\n";
+static const char *__doc__ = "XLB MAP program\n";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,10 +33,6 @@ static const struct option_wrapper long_options[] = {
 	{{0, 0, NULL,  0 }}
 };
 
-#ifndef PATH_MAX
-#define PATH_MAX	4096
-#endif
-
 //maps fd
 int global_config_map;
 int servs_map_ipv4;
@@ -56,21 +51,6 @@ struct config cfg = {
 	.do_unload = false,
 };
 
-int bpf_map_update_elem_check(int map_fd, const void *key, const void *value, __u64 flags){
-    int err;
-
-    err = bpf_map_update_elem(map_fd, key, value, flags);
-    if (err < 0) {
-		fprintf(stderr,
-			"WARN: Failed to update bpf map file: err(%d):%s\n",
-			errno, strerror(errno));
-		return err;
-	}
-    printf("\nUpdated to map %d\n",map_fd);
-
-    return 1;
-}
-
 int init_test_data(){
 	rs_id rid;
 	struct rs_info rs1 = {.mac = {0x52, 0x54, 0x00, 0x31, 0x6a, 0xb6}, .weight = 4};
@@ -86,36 +66,6 @@ int init_test_data(){
 	bpf_map_update_elem_check(rs_info_map, &rid, &rs2, BPF_ANY);
 
 	return 1;
-}
-
-int open_map(const char *ifname, const char *map_name){
-    int len;
-    char pin_dir[PATH_MAX];
-    const char *pin_basedir =  "/sys/fs/bpf";
-    struct bpf_map_info info = { 0 };
-
-    /* Use the --dev name as subdir for finding pinned maps */
-	len = snprintf(pin_dir, PATH_MAX, "%s/%s", pin_basedir, ifname);
-	if (len < 0) {
-		fprintf(stderr, "ERR: creating pin dirname\n");
-		return EXIT_FAIL_OPTION;
-	}
-
-	
-    int fd = open_bpf_map_file(pin_dir, map_name, &info);
-	if (fd < 0) {
-		return -1;
-	}
-    if (verbose) {
-		printf("\nOpened BPF map\n");
-		printf(" - BPF map (bpf_map_type:%d) fd: %d id:%d name:%s"
-		       " key_size:%d value_size:%d max_entries:%d\n",
-		       info.type, fd ,info.id, info.name,
-		       info.key_size, info.value_size, info.max_entries
-		       );
-	}
-
-    return fd;
 }
 
 int init_config_map(){

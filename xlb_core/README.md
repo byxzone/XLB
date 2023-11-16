@@ -10,6 +10,12 @@ Compile the project
 make
 ```
 
+Change dir to xlb_core
+
+```
+cd xlb_core
+```
+
 after you run this command, the xdp program is attached to your NIC DEVICE receive queue
 
 ```

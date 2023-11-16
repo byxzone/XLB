@@ -10,6 +10,8 @@ COMMON_DIR = ../common
 # Extend with another COMMON_OBJS
 COMMON_OBJS += $(COMMON_DIR)/common_user_bpf_xdp.o
 
+XLB_OBJS += map_common.o
+
 EXTRA_DEPS := $(COMMON_DIR)/parsing_helpers.h
 
 include $(COMMON_DIR)/common.mk

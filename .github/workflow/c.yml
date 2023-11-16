@@ -1,0 +1,23 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup dependencies
+      run: sudo apt update && sudo apt install clang llvm libelf-dev libpcap-dev build-essential linux-headers-$(uname -r) linux-tools-common linux-tools-generic libc6-dev-i386
+    - name: configure
+      run: ./configure
+    - name: make
+      run: make
+    - name: Test XLB
+      run: ip a && cd xlb_core && sudo ./xdp_loader -d eth0 && sudo ./xlb_map -d eth0
